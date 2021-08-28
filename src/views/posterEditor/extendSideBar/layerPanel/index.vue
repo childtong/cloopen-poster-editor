@@ -12,7 +12,7 @@
       >
         <draggable
           v-model="inPosterItems"
-          :options="{ animation: 200 }"
+          v-bind="{ animation: 200 }"
           class="draggable-container"
         >
           <panel-item

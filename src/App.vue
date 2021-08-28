@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <cepPosterEditor />
-    <!-- <router-view /> -->
   </div>
 </template>
 <script>

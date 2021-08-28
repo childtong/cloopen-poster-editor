@@ -33,6 +33,7 @@ export default {
   padding: 10px;
   .add-text {
     width: 100%;
+    color: #606266;
   }
 }
 </style>

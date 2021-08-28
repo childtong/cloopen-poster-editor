@@ -76,4 +76,41 @@ export default class ExportService {
             saveAs(base64ToBlob(res.src), 'poster.png')
         })
     }
+    static async savePosterImg() {
+        const allWidgets = getAllWidgets()
+        const background = store.state.poster.background
+        const backgroundHtml = background._codeGen(background, 'poster')
+        const canvasSize = store.state.poster.canvasSize
+        let bodyInnerHtml = ''
+        allWidgets.forEach(item => {
+            if (!item.visible) {
+                return
+            }
+            if (item._codeGen) {
+                bodyInnerHtml += item._codeGen(item) || ''
+            } else if (process.env.NODE_ENV !== 'production') {
+                console.warn(`类型为${item.type}的组件的构造函数未实现"_codeGen"方法`)
+            }
+        })
+        const containerNode = createDom({
+            tag: 'div',
+            style: {
+                position: 'absolute',
+                width: canvasSize.width + 'px',
+                height: canvasSize.height + 'px'
+            }
+        })
+        const backgroundNode = document.createElement('div')
+        const bodyInnerNode = document.createElement('div')
+        backgroundNode.innerHTML = backgroundHtml
+        bodyInnerNode.innerHTML = bodyInnerHtml
+        containerNode.appendChild(backgroundNode)
+        containerNode.appendChild(bodyInnerNode)
+        // document.body.appendChild(containerNode)
+        let imgData
+        await domToImg(containerNode, { width: canvasSize.width, height: canvasSize.height }).then(res => {
+            imgData = res.src
+        })
+        return imgData
+    }
 }

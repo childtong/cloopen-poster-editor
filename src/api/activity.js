@@ -1,32 +1,17 @@
 
-// import axios from 'axios'
+import PubSub from 'pubsub-js'
+import ExportService from 'poster/service/exportService'
 /**
  * 添加页面配置
  * 此处的config是已经序列化好的当前编辑器的json数据
  * @param {Object} config
  */
-export function addActivityPageConfig(config) {
+export async function addActivityPageConfig(config) {
     console.log('页面配置已上传---本地测试用', config)
-    // localStorage.setItem('posterData', JSON.stringify(config))
-    const posterApi = localStorage.getItem('posterApi')
-    const token = localStorage.getItem('cepWeb__token')
-    console.log('测试保存', posterApi + '---' + token)
+    const imgData = await ExportService.savePosterImg()
+    const configData = JSON.stringify(config)
+    PubSub.publish('saveFunc', { imgData: imgData, configData: configData }) // 发布
     return Promise.resolve()
-    // axios({
-    //     method: 'post',
-    //     url: posterApi,
-    //     data: JSON.stringify(config),
-    //     headers: {
-    //         'token': token
-    //     }
-    // })
-    // .then(function(response) {
-    //     console.log(response)
-    //     return Promise.resolve()
-    // }).catch(function(error) {
-    //     console.log(error)
-    //     return Promise.reject()
-    // })
 }
 
 /**

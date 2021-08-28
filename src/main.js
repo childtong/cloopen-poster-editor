@@ -17,8 +17,34 @@ Vue.use(ElementUI)
 Vue.use(VueAddition)
 Vue.use(PortalVue)
 
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount('#app')
+let instance = null
+function render(props = {}) {
+  const { container } = props
+  instance = new Vue({
+    router,
+    store,
+    render: (h) => h(App)
+  }).$mount(container ? container.querySelector('#app') : '#app')
+}
+
+if (!window.__POWERED_BY_QIANKUN__) { render() }
+
+// new Vue({
+//   router,
+//   store,
+//   render: h => h(App)
+// }).$mount('#app')
+
+export async function bootstrap() {
+  console.log('app bootstrap')
+}
+export async function mount(props) {
+  console.log('app mount')
+  Vue.prototype.$onGlobalStateChange = props.onGlobalStateChange
+  Vue.prototype.$setGlobalState = props.setGlobalState
+  localStorage.setItem('configData', props?.configData)
+  render(props)
+}
+export async function unmount() {
+  instance.$destroy()
+}

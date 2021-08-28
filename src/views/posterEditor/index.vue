@@ -22,6 +22,7 @@ import extendSideBar from './extendSideBar'
 import layerPanel from './extendSideBar/layerPanel'
 import store from '@/store'
 import posterModule from './vuexModule/poster'
+import PubSub from 'pubsub-js'
 
 const DELETE_KEY = 8 // delete
 const COPY_KEY = 67 // c
@@ -86,8 +87,19 @@ export default {
       background: 'rgba(255, 255, 255, 0.6)'
     })
     await this.resetState()
+    const configData = JSON.parse(localStorage.getItem('configData'))
+    if (configData) {
+      await this.updatePageConfig(configData)
+    }
     loading.close()
     this.initLoading = false
+    // 订阅
+    PubSub.subscribe('saveFunc', (event, data) => {
+      this.$setGlobalState({
+        imgData: data.imgData,
+        configData: data.configData
+      })
+    })
   },
   async mounted() {
     document.addEventListener('keydown', this.keydownHandle)
@@ -106,7 +118,8 @@ export default {
       'copyWidget',
       'setLayerPanel',
       'setReferenceLineVisible',
-      'resetState'
+      'resetState',
+      'updatePageConfig'
     ]),
     ...mapActions({
       undo: 'history/undo',
@@ -127,7 +140,7 @@ export default {
           if (this.activeItemIds.length > 0) {
             this.replacePosterItems(
               this.posterItems.filter(
-                item => !this.activeItemIds.includes(item.id)
+                (item) => !this.activeItemIds.includes(item.id)
               )
             )
           }
@@ -145,7 +158,7 @@ export default {
             // const widgetRef = widgetRefs[itemId][0]
             // copiedWidgets.push(getCopyData(widgetRef.item, widgetRef._self))
             // })
-            const copiedWidgets = [...this.activeItems].map(item => {
+            const copiedWidgets = [...this.activeItems].map((item) => {
               item._copyFrom = 'command'
               return item
             })

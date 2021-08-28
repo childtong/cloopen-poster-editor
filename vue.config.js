@@ -1,6 +1,7 @@
 'use strict'
 const path = require('path')
 const CompressionPlugin = require('compression-webpack-plugin')
+const packageName = require('./package.json').name
 
 function resolve(dir) {
   return path.join(__dirname, dir)
@@ -30,6 +31,11 @@ const webpackConfig = {
   },
   configureWebpack: {
     name: name,
+    output: {
+      library: `${packageName}-[name]`,
+      libraryTarget: 'umd',
+      jsonpFunction: `webpackJsonp_${packageName}`
+    },
     resolve: {
       extensions: ['.ts', '.tsx', '.js', '.json'],
       alias: {
@@ -37,14 +43,6 @@ const webpackConfig = {
         'poster': resolve('src/views/posterEditor')
       }
     },
-    // entry: './src/main.js',
-    // output: {
-    //   path: path.resolve(__dirname, './dist'),
-    //   filename: 'index.js',
-    //   library: 'cep-poster-editor',
-    //   libraryTarget: 'umd',
-    //   umdNamedDefine: true
-    // },
     plugins: [
       new CompressionPlugin({
         test: /\.js$|\.html$|\.css/,

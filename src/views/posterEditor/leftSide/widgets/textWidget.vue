@@ -97,6 +97,7 @@ export default {
   .add-text {
     width: 100%;
     margin-top: 20px;
+    color: #606266;
   }
 }
 </style>

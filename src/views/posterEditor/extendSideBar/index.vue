@@ -70,7 +70,7 @@
           <i class="el-icon-document-copy" />
         </div>
       </el-tooltip>
-      <!-- <el-tooltip
+      <el-tooltip
         effect="dark"
         content="生成H5代码（Beta）"
         placement="left"
@@ -79,7 +79,7 @@
         <div class="item" @click="exportH5">
           <i class="icon-h5" />
         </div>
-      </el-tooltip> -->
+      </el-tooltip>
       <el-tooltip
         effect="dark"
         content="生成海报"
