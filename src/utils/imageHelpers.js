@@ -45,7 +45,7 @@ export function validateImage(file) {
             reader.onerror = reject
             if (!/image/.test(file.type)) {
                 alert(`请选择图片文件(*.jpg或*.png格式,${MAX_IMG_SIZE_MB}MB以内)`)
-            } else if (!['jpg', 'png', 'JPG', 'PNG'].includes(file.name.replace(/.+\./, ''))) {
+            } else if (!['jpg', 'png', 'JPG', 'jpeg', 'JPEG', 'PNG'].includes(file.name.replace(/.+\./, ''))) {
                 alert('请选择正确格式的图片(*.jpg或*.png格式)')
             } else if (file.size > MAX_IMG_SIZE) {
                 alert(`图片体积过大,请控制在${MAX_IMG_SIZE_MB}以内`)
